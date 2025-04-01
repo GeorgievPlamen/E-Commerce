@@ -4,7 +4,7 @@ using Users.Core.ServiceContracts;
 
 namespace Users.API.Controllers;
 
-[Route("api/[controler]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthController(IUsersService usersService) : ControllerBase
 {
