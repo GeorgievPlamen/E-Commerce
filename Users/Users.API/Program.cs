@@ -1,6 +1,8 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Users.API.Middlewares;
 using Users.Core;
+using Users.Core.Mappers;
 using Users.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(ApplicationUserMappingProfile)));
 
 var app = builder.Build();
 

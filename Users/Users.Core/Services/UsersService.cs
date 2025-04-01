@@ -1,3 +1,4 @@
+using AutoMapper;
 using Users.Core.DTO;
 using Users.Core.Entities;
 using Users.Core.RepositoryContracts;
@@ -5,7 +6,9 @@ using Users.Core.ServiceContracts;
 
 namespace Users.Core.Services;
 
-internal class UsersService(IUsersRepository usersRepository) : IUsersService
+internal class UsersService(
+    IUsersRepository usersRepository,
+    IMapper mapper) : IUsersService
 {
     public async Task<AuthenticationResponse?> Login(LoginRequest loginRequest)
     {
@@ -17,36 +20,20 @@ internal class UsersService(IUsersRepository usersRepository) : IUsersService
         if (user is null)
             return null;
 
-        return new(
-            user.UserID,
-            user.Email,
-            user.PersonName,
-            user.Gender,
-            "token",
-            Success: true);
+        return mapper.Map<AuthenticationResponse>(user) with { Success = true, Token = "token" };
     }
 
     public async Task<AuthenticationResponse?> Register(RegisterRequest registerRequest)
     {
-        var user = new ApplicationUser()
-        {
-            PersonName = registerRequest.PersonName,
-            Email = registerRequest.Email,
-            Password = registerRequest.Password,
-            Gender = registerRequest.Gender.ToString()
-        };
+        var user = mapper.Map<ApplicationUser>(registerRequest);
 
         var registeredUser = await usersRepository.AddUser(user);
 
         if (registeredUser is null)
             return null;
 
-        return new(
-            registeredUser.UserID,
-            registeredUser.Email,
-            registeredUser.PersonName,
-            registeredUser.Gender,
-            "token",
-            Success: true);
+        var response = mapper.Map<AuthenticationResponse>(registeredUser) with { Success = true, Token = "token" };
+
+        return response;
     }
 }
