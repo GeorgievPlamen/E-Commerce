@@ -12,11 +12,12 @@ public class UsersRepository(DapperDbContext dbContext) : IUsersRepository
     {
         user.UserID = Guid.CreateVersion7();
 
-        string query = @"
-        INSERT INTO public.""Users""
-            (""UserID"", ""Email"", ""PersonName"",""Gender"",""Password"") 
-        VALUES
-            (@UserID, @Email, @PersonName, @Gender, @Password)";
+        string query = """
+            INSERT INTO public."Users"
+            ("UserID", ""Email", "PersonName","Gender","Password") 
+            VALUES
+            (@UserID, @Email, @PersonName, @Gender, @Password)
+            """;
 
         var rowsAffected = await dbContext.DbConnection.ExecuteAsync(query, user);
 
