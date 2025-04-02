@@ -1,5 +1,4 @@
 using Dapper;
-using Users.Core.DTO;
 using Users.Core.Entities;
 using Users.Core.RepositoryContracts;
 using Users.Infrastructure.DbContext;
@@ -14,7 +13,7 @@ public class UsersRepository(DapperDbContext dbContext) : IUsersRepository
 
         string query = """
             INSERT INTO public."Users"
-            ("UserID", ""Email", "PersonName","Gender","Password") 
+            ("UserID", "Email", "PersonName","Gender","Password") 
             VALUES
             (@UserID, @Email, @PersonName, @Gender, @Password)
             """;
@@ -29,13 +28,13 @@ public class UsersRepository(DapperDbContext dbContext) : IUsersRepository
 
     public async Task<ApplicationUser?> GetUserByEmailAndPassword(string? email, string? password)
     {
-        return new()
-        {
-            UserID = Guid.CreateVersion7(),
-            Email = email,
-            Password = password,
-            PersonName = "Fake name",
-            Gender = GenderOptions.Male.ToString()
-        };
+        var query = """
+            SELECT * FROM public."Users" 
+            WHERE "Email"=@Email AND "Password"=@Password
+            """;
+
+        var user = await dbContext.DbConnection.QueryFirstOrDefaultAsync<ApplicationUser>(query, new { Email = email, Password = password });
+
+        return user;
     }
 }
