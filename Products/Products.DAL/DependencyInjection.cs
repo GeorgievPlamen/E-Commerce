@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Products.DAL.Context;
+using Products.DAL.Repositories;
+using Products.DAL.RepositoryContracts;
 
 namespace Products.DAL;
 
@@ -13,6 +15,8 @@ public static class DependencyInjection
         {
             opt.UseMySQL(config.GetConnectionString("DefaultConnection")!);
         });
+
+        services.AddScoped<IProductsRepository, ProductsRepository>();
 
         return services;
     }
