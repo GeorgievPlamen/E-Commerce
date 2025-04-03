@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Products.API.ApiEndpoints;
 using Products.API.Middlewares;
 using Products.BLL;
 using Products.DAL;
@@ -20,5 +21,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapProducts();
 
 app.Run();
