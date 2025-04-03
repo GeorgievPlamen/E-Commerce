@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
 using Products.API.ApiEndpoints;
 using Products.API.Middlewares;
@@ -11,12 +12,26 @@ builder.Services.AddDAL(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.ConfigureHttpJsonOptions(opt =>
+    opt.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(opt => opt.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyHeader();
+    builder.AllowAnyMethod();
+    builder.AllowAnyOrigin();
+}));
 
 var app = builder.Build();
 
 app.UseExceptionHandlingMiddleware();
 app.UseRouting();
+app.UseSwagger();
+app.UseSwaggerUI();
 
+
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
