@@ -1,0 +1,52 @@
+services:
+  products-microservice:
+    image: georgievp/ecommerce-products-service:v1.0
+    environment:
+      - MYSQL_HOST=mysql-host-productsmicroservice
+      - MYSQL_PASSWORD=admin
+    ports:
+      - 8080:8080
+    networks:
+      - ecommerce-network
+
+  users-microservice:
+    image: georgievp/ecommerce-users-service:v1.0
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=postgres-container
+    ports:
+      - 9090:9090
+    networks:
+      - ecommerce-network
+
+  mysql-container:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce-network
+    hostname: mysql-host-productsmicroservice
+
+  psql-container:
+    image: postgres:latest
+    restart: always
+    user: postgres
+    volumes:
+      - "./postgres-init:/docker-entrypoint-initdb.d"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=eCommerceUsers
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce-network
+    hostname: mysql-host-productsmicroservice
+
+networks:
+  ecommerce-network:
+    driver: bridge
