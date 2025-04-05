@@ -45,7 +45,7 @@ services:
       - "5432:5432"
     networks:
       - ecommerce-network
-    hostname: mysql-host-productsmicroservice
+    hostname: postgres-container
 
 networks:
   ecommerce-network:

@@ -39,4 +39,6 @@ app.MapControllers();
 
 app.MapProducts();
 
+app.MapGet("api/health", () => Results.Ok("Hi, from Products Service"));
+
 app.Run();

@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Users.API.Middlewares;
 using Users.Core;
 using Users.Core.Mappers;
@@ -29,8 +30,8 @@ builder.Services.AddCors(opt =>
 });
 
 var app = builder.Build();
-
 app.UseExceptionHandlingMiddleware();
+
 app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -38,4 +39,5 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGet("api/health", () => Results.Ok("Hi, from Users Service"));
 app.Run();
