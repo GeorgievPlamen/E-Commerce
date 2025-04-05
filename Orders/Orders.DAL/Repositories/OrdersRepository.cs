@@ -10,6 +10,9 @@ public class OrdersRepository(IMongoDatabase db) : IOrdersRepository
     public async Task<Order?> AddOrder(Order order)
     {
         order.OrderID = Guid.NewGuid();
+        order._id = order.OrderID;
+
+        order.OrderItems.ForEach(x => x._id = Guid.NewGuid());
 
         await _orders.InsertOneAsync(order);
 
@@ -35,7 +38,7 @@ public class OrdersRepository(IMongoDatabase db) : IOrdersRepository
 
     public async Task<IEnumerable<Order>> GetOrders()
     {
-        var result = await _orders.FindAsync(Builders<Order>.Filter.Empty);
+        var result = await _orders.FindAsync(FilterDefinition<Order>.Empty);
 
         return result.ToList();
     }
