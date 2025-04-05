@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddDAL();
+builder.Services.AddDAL(builder.Configuration);
 builder.Services.AddBLL();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
