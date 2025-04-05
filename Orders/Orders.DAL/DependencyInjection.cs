@@ -10,7 +10,7 @@ public static class DependencyInjection
     {
         var connectionStringTemplate = configuration.GetConnectionString("MongoDB");
 
-        var connectionString = connectionStringTemplate
+        var connectionString = connectionStringTemplate!
             .Replace("$MONGO_HOST", Environment.GetEnvironmentVariable("MONGO_HOST"))
             .Replace("$MONGO_PORT", Environment.GetEnvironmentVariable("MONGO_PORT"));
 
