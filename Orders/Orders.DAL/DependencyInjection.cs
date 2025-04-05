@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Orders.DAL.Contracts;
+using Orders.DAL.Repositories;
 
 namespace Orders.DAL;
 
@@ -23,6 +25,7 @@ public static class DependencyInjection
             return client!.GetDatabase("OrdersDatabase");
         });
 
+        services.AddScoped<IOrdersRepository, OrdersRepository>();
         return services;
     }
 }
