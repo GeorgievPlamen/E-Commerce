@@ -49,6 +49,6 @@ public class UsersRepository(DapperDbContext dbContext) : IUsersRepository
 
         using var connection = dbContext.DbConnection;
 
-        return await connection.QueryFirstOrDefaultAsync(query, parameters);
+        return await connection.QueryFirstOrDefaultAsync<ApplicationUser>(query, parameters);
     }
 }

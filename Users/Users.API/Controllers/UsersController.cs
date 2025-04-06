@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Users.Core.DTO;
 using Users.Core.ServiceContracts;
 
 namespace Users.API.Controllers;

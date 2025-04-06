@@ -9,10 +9,10 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "POSTGRES_HOST": "localhost",
-        "POSTGRES_PASSOWRD": "admin",
+        "POSTGRES_PASSWORD": "admin",
+        "POSTGRES_PORT": "5432",
         "POSTGRES_DATABASE": "eCommerceUsers",
-        "POSTGRES_USER": "postgres",
-        "POSTGRES_PORT": "5432"
+        "POSTGRES_USER": "postgres"
       }
     },
     "https": {
@@ -23,7 +23,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "POSTGRES_HOST": "localhost",
-        "POSTGRES_PASSOWRD": "admin",
+        "POSTGRES_PASSWORD": "admin",
         "POSTGRES_DATABASE": "eCommerceUsers",
         "POSTGRES_USER": "postgres",
         "POSTGRES_PORT": "5432"
