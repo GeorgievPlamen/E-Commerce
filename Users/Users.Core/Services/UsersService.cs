@@ -10,6 +10,17 @@ internal class UsersService(
     IUsersRepository usersRepository,
     IMapper mapper) : IUsersService
 {
+    public async Task<UserDTO?> GetUserByUserID(Guid userID)
+    {
+        var user = await usersRepository
+            .GetUserByUserID(userID);
+
+        if (user is null)
+            return null;
+
+        return mapper.Map<UserDTO>(user);
+    }
+
     public async Task<AuthenticationResponse?> Login(LoginRequest loginRequest)
     {
         var user = await usersRepository
