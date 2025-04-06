@@ -1,6 +1,7 @@
 using AutoMapper;
 using MongoDB.Driver;
 using Orders.BLL.DTO;
+using Orders.BLL.HttpClients;
 using Orders.BLL.ServiceContracts;
 using Orders.DAL.Contracts;
 using Orders.DAL.Entities;
@@ -8,12 +9,15 @@ using Orders.DAL.Entities;
 namespace Orders.BLL.Services;
 
 public class OrdersService(
+    UsersMicroserviceClient usersMicroserviceClient,
     IOrdersRepository ordersRepository,
     IMapper mapper) : IOrdersService
 {
     public async Task<OrderResponse?> AddOrder(OrderAddRequest orderAddRequest)
     {
-        // TODO validate UserID
+        var user = await usersMicroserviceClient.GetUserByUserID(orderAddRequest.UserID);
+
+        ArgumentNullException.ThrowIfNull(user);
 
         var order = mapper.Map<Order>(orderAddRequest);
 
@@ -65,6 +69,10 @@ public class OrdersService(
         }
 
         order.TotalBill = order.OrderItems.Sum(x => x.TotalPrice);
+
+        var user = await usersMicroserviceClient.GetUserByUserID(orderUpdateRequest.UserID);
+
+        ArgumentNullException.ThrowIfNull(user);
 
         var result = mapper.Map<OrderResponse?>(await ordersRepository.UpdateOrder(order));
 

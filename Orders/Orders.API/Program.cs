@@ -1,6 +1,7 @@
 
 using FluentValidation.AspNetCore;
 using Orders.BLL;
+using Orders.BLL.HttpClients;
 using Orders.DAL;
 using Users.API.Middlewares;
 
@@ -19,6 +20,13 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(builder =>
     builder.AllowAnyMethod();
     builder.AllowAnyOrigin();
 }));
+builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
+{
+    var usersMicroserviceName = builder.Configuration["UsersMicroserviceName"];
+    var usersMicroservicePort = builder.Configuration["UsersMicroservicePort"];
+
+    client.BaseAddress = new Uri($"http://{usersMicroserviceName}:{usersMicroservicePort}");
+});
 
 var app = builder.Build();
 
