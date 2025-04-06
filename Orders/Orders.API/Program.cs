@@ -20,6 +20,7 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(builder =>
     builder.AllowAnyMethod();
     builder.AllowAnyOrigin();
 }));
+
 builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
 {
     var usersMicroserviceName = builder.Configuration["UsersMicroserviceName"];

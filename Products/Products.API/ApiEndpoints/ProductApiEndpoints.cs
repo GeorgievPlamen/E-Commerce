@@ -20,6 +20,9 @@ public static class ProductApiEndpoints
         {
             var product = await productsService.GetProductByCondition(x => x.ProductID == productId);
 
+            if (product is null)
+                return Results.NotFound();
+
             return Results.Ok(product);
         });
 
