@@ -1,5 +1,4 @@
 using AutoMapper;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Orders.BLL.DTO;
 using Orders.BLL.HttpClients;
@@ -23,6 +22,8 @@ public class OrdersService(
 
         var order = mapper.Map<Order>(orderAddRequest);
 
+        var products = new List<ProductDTO>();
+
         foreach (var item in order.OrderItems)
         {
             item.TotalPrice = item.Quantity * item.UnitPrice;
@@ -30,11 +31,27 @@ public class OrdersService(
             var product = await productsMicroserviceClient.GetProductByProductID(item.ProductID);
 
             ArgumentNullException.ThrowIfNull(product);
+
+            products.Add(product);
+        }
+
+        foreach (var item in order.OrderItems)
+        {
+            var product = products.FirstOrDefault(x => x.ProductID == item.ProductID);
+
+            if (product is null) continue;
+
+            mapper.Map<ProductDTO, OrderItem>(product, item);
         }
 
         order.TotalBill = order.OrderItems.Sum(x => x.TotalPrice);
 
         var result = mapper.Map<OrderResponse?>(await ordersRepository.AddOrder(order));
+
+        if (user is not null)
+        {
+            mapper.Map<UserDTO, OrderResponse>(user, result);
+        }
 
         return result;
     }
@@ -47,6 +64,13 @@ public class OrdersService(
     public async Task<OrderResponse?> GetOrderByCondition(FilterDefinition<Order> filter)
     {
         var result = mapper.Map<OrderResponse?>(await ordersRepository.GetOrderByCondition(filter));
+
+        var user = await usersMicroserviceClient.GetUserByUserID(result.UserID);
+
+        if (user is not null)
+        {
+            mapper.Map<UserDTO, OrderResponse>(user, result);
+        }
 
         return result;
     }
@@ -67,7 +91,14 @@ public class OrdersService(
 
                 mapper.Map<ProductDTO, OrderItemResponse>(product, item);
             }
+            var user = await usersMicroserviceClient.GetUserByUserID(response.UserID);
+
+            if (user is not null)
+            {
+                mapper.Map<UserDTO, OrderResponse>(user, response);
+            }
         }
+
 
         return result;
     }
@@ -75,6 +106,27 @@ public class OrdersService(
     public async Task<List<OrderResponse?>> GetOrdersByCondition(FilterDefinition<Order> filter)
     {
         var result = mapper.Map<List<OrderResponse?>>(await ordersRepository.GetOrdersByCondition(filter));
+
+        foreach (var response in result)
+        {
+            if (response is null) continue;
+
+            foreach (var item in response.OrderItems)
+            {
+                var product = await productsMicroserviceClient.GetProductByProductID(item.ProductID);
+
+                if (product is null) continue;
+
+                mapper.Map<ProductDTO, OrderItemResponse>(product, item);
+            }
+
+            var user = await usersMicroserviceClient.GetUserByUserID(response.UserID);
+
+            if (user is not null)
+            {
+                mapper.Map<UserDTO, OrderResponse>(user, response);
+            }
+        }
 
         return result;
     }
@@ -95,6 +147,11 @@ public class OrdersService(
         ArgumentNullException.ThrowIfNull(user);
 
         var result = mapper.Map<OrderResponse?>(await ordersRepository.UpdateOrder(order));
+
+        if (user is not null)
+        {
+            mapper.Map<UserDTO, OrderResponse>(user, result);
+        }
 
         return result;
     }
