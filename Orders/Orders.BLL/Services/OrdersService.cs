@@ -1,4 +1,5 @@
 using AutoMapper;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Orders.BLL.DTO;
 using Orders.BLL.HttpClients;
@@ -10,6 +11,7 @@ namespace Orders.BLL.Services;
 
 public class OrdersService(
     UsersMicroserviceClient usersMicroserviceClient,
+    ProductsMicroserviceClient productsMicroserviceClient,
     IOrdersRepository ordersRepository,
     IMapper mapper) : IOrdersService
 {
@@ -24,6 +26,10 @@ public class OrdersService(
         foreach (var item in order.OrderItems)
         {
             item.TotalPrice = item.Quantity * item.UnitPrice;
+
+            var product = await productsMicroserviceClient.GetProductByProductID(item.ProductID);
+
+            ArgumentNullException.ThrowIfNull(product);
         }
 
         order.TotalBill = order.OrderItems.Sum(x => x.TotalPrice);
@@ -48,6 +54,20 @@ public class OrdersService(
     public async Task<List<OrderResponse?>> GetOrders()
     {
         var result = mapper.Map<List<OrderResponse?>>(await ordersRepository.GetOrders());
+
+        foreach (var response in result)
+        {
+            if (response is null) continue;
+
+            foreach (var item in response.OrderItems)
+            {
+                var product = await productsMicroserviceClient.GetProductByProductID(item.ProductID);
+
+                if (product is null) continue;
+
+                mapper.Map<ProductDTO, OrderItemResponse>(product, item);
+            }
+        }
 
         return result;
     }

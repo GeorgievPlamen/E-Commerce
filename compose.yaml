@@ -8,6 +8,7 @@ services:
       - 8080:8080
     networks:
       - ecommerce-network
+    hostname: products-microservice
 
   users-microservice:
     image: users-microservice:latest
@@ -18,21 +19,27 @@ services:
       - 9090:9090
     networks:
       - ecommerce-network
+    hostname: users-microservice
 
   orders-microservice:
     image: orders-microservice:latest
+    build:
+      context: ./Users
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - MONGO_HOST=mongodb-container
       - MONGO_PORT=27017
       - MONGO_DATABASE=OrdersDatabase
-      - UsersMicroserviceName=localhost
+      - UsersMicroserviceName=users-microservice
       - UsersMicroservicePort=9090
+      - ProductsMicroserviceName=products-microservice
+      - ProductsMicroservicePort=8080
     ports:
       - "7000:8080"
     depends_on:
       - mongo-container
       - users-microservice
+      - products-microservice
     networks:
       - ecommerce-network
 
