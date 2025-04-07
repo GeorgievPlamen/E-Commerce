@@ -1,6 +1,6 @@
 services:
   products-microservice:
-    image: georgievp/ecommerce-products-service:v1.0
+    image: products-microservice:latest
     environment:
       - MYSQL_HOST=mysql-host-productsmicroservice
       - MYSQL_PASSWORD=admin
@@ -10,12 +10,29 @@ services:
       - ecommerce-network
 
   users-microservice:
-    image: georgievp/ecommerce-users-service:v1.0
+    image: users-microservice:latest
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_HOST=postgres-container
     ports:
       - 9090:9090
+    networks:
+      - ecommerce-network
+
+  orders-microservice:
+    image: orders-microservice:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO_HOST=mongodb-container
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=OrdersDatabase
+      - UsersMicroserviceName=localhost
+      - UsersMicroservicePort=9090
+    ports:
+      - "7000:8080"
+    depends_on:
+      - mongo-container
+      - users-microservice
     networks:
       - ecommerce-network
 
@@ -46,6 +63,16 @@ services:
     networks:
       - ecommerce-network
     hostname: postgres-container
+
+  mongo-container:
+    image: mongo:latest
+    volumes:
+      - "./orders-init:/docker-entrypoint-initdb.d"
+    ports:
+      - "27017:27017"
+    networks:
+      - ecommerce-network
+    hostname: mongodb-container
 
 networks:
   ecommerce-network:
