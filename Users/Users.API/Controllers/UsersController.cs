@@ -10,6 +10,10 @@ public class UsersController(IUsersService usersService) : ControllerBase
     [HttpGet("{userID}")]
     public async Task<IActionResult> GetUserById(Guid? userID)
     {
+        await Task.Delay(100);
+
+        throw new NotImplementedException();
+
         if (!userID.HasValue)
             return BadRequest("Invalid");
 

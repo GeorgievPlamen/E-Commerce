@@ -19,7 +19,7 @@ public class OrdersController(IOrdersService ordersService) : ControllerBase
         return result;
     }
 
-    [HttpGet("/search/orderid/{orderID}")]
+    [HttpGet("search/orderid/{orderID}")]
     public async Task<OrderResponse> GetOrderByOrderID(Guid orderID)
     {
         var filter = Builders<Order>.Filter.Eq(x => x.OrderID, orderID);
@@ -28,7 +28,7 @@ public class OrdersController(IOrdersService ordersService) : ControllerBase
         return result;
     }
 
-    [HttpGet("/search/productid/{productID}")]
+    [HttpGet("search/productid/{productID}")]
     public async Task<IEnumerable<OrderResponse>> GetOrdersByProductID(Guid productID)
     {
         var filter = Builders<Order>.Filter.ElemMatch(
@@ -40,7 +40,7 @@ public class OrdersController(IOrdersService ordersService) : ControllerBase
         return result;
     }
 
-    [HttpGet("/search/orderDate/{orderDate}")]
+    [HttpGet("search/orderDate/{orderDate}")]
     public async Task<IEnumerable<OrderResponse>> GetOrdersByOrderDate(DateTime orderDate)
     {
         var filter = Builders<Order>.Filter.Eq(

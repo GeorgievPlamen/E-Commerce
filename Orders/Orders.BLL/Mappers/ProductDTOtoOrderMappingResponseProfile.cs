@@ -9,7 +9,7 @@ public class ProductDTOtoOrderMappingResponseProfile : Profile
     public ProductDTOtoOrderMappingResponseProfile()
     {
         CreateMap<ProductDTO, OrderItemResponse>()
-          .ForMember(dest => dest.ProductID, opt => opt.MapFrom(src => src.ProductName))
-          .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Category));
+          .ForMember(dest => dest.ProductID, opt => opt.MapFrom(src => src.ProductID))
+          .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice));
     }
 }

@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Orders.BLL;
 using Orders.BLL.HttpClients;
 using Orders.DAL;
+using Polly;
 using Users.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,17 @@ builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
     var usersMicroservicePort = builder.Configuration["UsersMicroservicePort"];
 
     client.BaseAddress = new Uri($"http://{usersMicroserviceName}:{usersMicroservicePort}");
-});
+}).AddPolicyHandler(
+    Policy
+        .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+        .WaitAndRetryAsync(
+            retryCount: 5,
+            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(2),
+            onRetry: (outcome, timespan, retryAttempt, context) =>
+            {
+                // TODO : add logs
+            })
+);
 
 builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
 {
