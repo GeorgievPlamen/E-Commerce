@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Orders.BLL;
 using Orders.BLL.HttpClients;
+using Orders.BLL.PollyPolicies;
 using Orders.DAL;
 using Polly;
 using Users.API.Middlewares;
@@ -22,23 +23,15 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(builder =>
     builder.AllowAnyOrigin();
 }));
 
+builder.Services.AddScoped<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
+
 builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
 {
     var usersMicroserviceName = builder.Configuration["UsersMicroserviceName"];
     var usersMicroservicePort = builder.Configuration["UsersMicroservicePort"];
 
     client.BaseAddress = new Uri($"http://{usersMicroserviceName}:{usersMicroservicePort}");
-}).AddPolicyHandler(
-    Policy
-        .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-        .WaitAndRetryAsync(
-            retryCount: 5,
-            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(2),
-            onRetry: (outcome, timespan, retryAttempt, context) =>
-            {
-                // TODO : add logs
-            })
-);
+}).AddPolicyHandler((services, _) => services.GetRequiredService<IUsersMicroservicePolicies>().GetRetryPolicy());
 
 builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
 {
