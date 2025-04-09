@@ -10,7 +10,7 @@ public class UsersMicroservicePolicies(ILogger<UsersMicroservicePolicies> logger
             .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
             .WaitAndRetryAsync(
                 retryCount: 5,
-                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(2),
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 onRetry: (outcome, timespan, retryAttempt, context) =>
                 {
                     logger.LogInformation("Executing retry attempt {retryAttempt}", retryAttempt);
