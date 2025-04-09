@@ -4,7 +4,6 @@ using Orders.BLL;
 using Orders.BLL.HttpClients;
 using Orders.BLL.PollyPolicies;
 using Orders.DAL;
-using Polly;
 using Users.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +41,8 @@ builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
     var productsMicroservicePort = builder.Configuration["ProductsMicroservicePort"];
 
     client.BaseAddress = new Uri($"http://{productsMicroserviceName}:{productsMicroservicePort}");
-}).AddPolicyHandler((services, _) => services.GetRequiredService<IProductsMicroservicePolicies>().GetFallbackPolicy());
+}).AddPolicyHandler((services, _) => services.GetRequiredService<IProductsMicroservicePolicies>().GetFallbackPolicy())
+    .AddPolicyHandler((services, _) => services.GetRequiredService<IProductsMicroservicePolicies>().GetBulkheadIsolationPolicy());
 
 
 var app = builder.Build();
