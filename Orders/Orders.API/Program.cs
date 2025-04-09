@@ -24,6 +24,7 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(builder =>
 }));
 
 builder.Services.AddScoped<IUsersMicroservicePolicies, UsersMicroservicePolicies>();
+builder.Services.AddScoped<IProductsMicroservicePolicies, ProductsMicroservicePolicies>();
 
 builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
 {
@@ -31,8 +32,7 @@ builder.Services.AddHttpClient<UsersMicroserviceClient>(client =>
     var usersMicroservicePort = builder.Configuration["UsersMicroservicePort"];
 
     client.BaseAddress = new Uri($"http://{usersMicroserviceName}:{usersMicroservicePort}");
-})
-    .AddPolicyHandler((services, _) => services.GetRequiredService<IUsersMicroservicePolicies>().GetRetryPolicy())
+}).AddPolicyHandler((services, _) => services.GetRequiredService<IUsersMicroservicePolicies>().GetRetryPolicy())
     .AddPolicyHandler((services, _) => services.GetRequiredService<IUsersMicroservicePolicies>().GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
@@ -41,7 +41,8 @@ builder.Services.AddHttpClient<ProductsMicroserviceClient>(client =>
     var productsMicroservicePort = builder.Configuration["ProductsMicroservicePort"];
 
     client.BaseAddress = new Uri($"http://{productsMicroserviceName}:{productsMicroservicePort}");
-});
+}).AddPolicyHandler((services, _) => services.GetRequiredService<IProductsMicroservicePolicies>().GetFallbackPolicy());
+
 
 var app = builder.Build();
 
