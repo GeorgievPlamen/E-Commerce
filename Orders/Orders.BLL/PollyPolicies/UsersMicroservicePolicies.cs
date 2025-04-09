@@ -34,4 +34,13 @@ public class UsersMicroservicePolicies(ILogger<UsersMicroservicePolicies> logger
     public IAsyncPolicy<HttpResponseMessage> GetTimeoutPolicy()
         => Policy
             .TimeoutAsync<HttpResponseMessage>(TimeSpan.FromMicroseconds(1500));
+
+    public IAsyncPolicy<HttpResponseMessage> GetCombinedPolicy()
+    {
+        var retry = GetRetryPolicy();
+        var circuitBreaker = GetCircuitBreakerPolicy();
+        var timeout = GetTimeoutPolicy();
+
+        return Policy.WrapAsync(retry, circuitBreaker, timeout);
+    }
 }
