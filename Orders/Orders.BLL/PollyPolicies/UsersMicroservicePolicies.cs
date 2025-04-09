@@ -30,4 +30,8 @@ public class UsersMicroservicePolicies(ILogger<UsersMicroservicePolicies> logger
                 {
                     logger.LogInformation("Circuit breaker reseting.");
                 });
+
+    public IAsyncPolicy<HttpResponseMessage> GetTimeoutPolicy()
+        => Policy
+            .TimeoutAsync<HttpResponseMessage>(TimeSpan.FromMicroseconds(1500));
 }
