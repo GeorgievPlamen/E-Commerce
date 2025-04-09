@@ -15,4 +15,19 @@ public class UsersMicroservicePolicies(ILogger<UsersMicroservicePolicies> logger
                 {
                     logger.LogInformation("Executing retry attempt {retryAttempt}", retryAttempt);
                 });
+
+    public IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        => Policy
+            .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 3,
+                durationOfBreak: TimeSpan.FromMinutes(2),
+                onBreak: (outcome, timespan) =>
+                {
+                    logger.LogInformation("Circuit breaker triggered.");
+                },
+                onReset: () =>
+                {
+                    logger.LogInformation("Circuit breaker reseting.");
+                });
 }
