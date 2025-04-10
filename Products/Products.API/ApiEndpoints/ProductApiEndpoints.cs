@@ -18,9 +18,6 @@ public static class ProductApiEndpoints
 
         group.MapGet("/search/product-id/{productId}", async (Guid productId, IProductsService productsService) =>
         {
-            await Task.Delay(100);
-            throw new NotImplementedException();
-
             var product = await productsService.GetProductByCondition(x => x.ProductID == productId);
 
             if (product is null)
