@@ -31,6 +31,17 @@ public class ProductsMicroserviceClient(
 
         var product = await result.Content.ReadFromJsonAsync<ProductDTO>();
 
+        if (product is not null)
+        {
+            var key = $"product:{product.ProductID}";
+            var productJson = JsonSerializer.Serialize(product);
+            var cacheOptions = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(30))
+                .SetSlidingExpiration(TimeSpan.FromSeconds(10));
+
+            await cache.SetStringAsync(key, productJson, cacheOptions);
+        }
+
         return product;
     }
 }
