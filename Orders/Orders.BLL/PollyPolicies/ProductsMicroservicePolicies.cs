@@ -27,7 +27,7 @@ public class ProductsMicroservicePolicies(ILogger<ProductsMicroservicePolicies> 
 
             var product = new ProductDTO(Guid.Empty, "Unavailable", "Unavailable", 0, 0);
 
-            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.ServiceUnavailable)
             {
                 Content = new StringContent(JsonSerializer.Serialize(product))
             };

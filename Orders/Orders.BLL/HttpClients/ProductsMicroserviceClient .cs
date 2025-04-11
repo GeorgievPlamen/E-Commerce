@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
@@ -31,13 +32,13 @@ public class ProductsMicroserviceClient(
 
         var product = await result.Content.ReadFromJsonAsync<ProductDTO>();
 
-        if (product is not null)
+        if (result.StatusCode == HttpStatusCode.OK && product is not null)
         {
             var key = $"product:{product.ProductID}";
             var productJson = JsonSerializer.Serialize(product);
             var cacheOptions = new DistributedCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromSeconds(30))
-                .SetSlidingExpiration(TimeSpan.FromSeconds(10));
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(300))
+                .SetSlidingExpiration(TimeSpan.FromSeconds(100));
 
             await cache.SetStringAsync(key, productJson, cacheOptions);
         }
