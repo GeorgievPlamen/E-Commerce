@@ -1,11 +1,20 @@
 services:
+  apigateway:
+    image: apigateway
+    build:
+      context: ./Orders/ApiGateway
+    ports:
+      - 4000:5050
+    networks:
+      - ecommerce-network
+
   products-microservice:
     image: products-microservice:latest
     environment:
       - MYSQL_HOST=mysql-host-productsmicroservice
       - MYSQL_PASSWORD=admin
     ports:
-      - 8080:8080
+      - 7070:7070
     networks:
       - ecommerce-network
     hostname: products-microservice
@@ -23,8 +32,6 @@ services:
 
   orders-microservice:
     image: orders-microservice:latest
-    build:
-      context: ./Users
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - MONGO_HOST=mongodb-container
@@ -33,11 +40,11 @@ services:
       - UsersMicroserviceName=users-microservice
       - UsersMicroservicePort=9090
       - ProductsMicroserviceName=products-microservice
-      - ProductsMicroservicePort=8080
+      - ProductsMicroservicePort=7070
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:
-      - "7000:8080"
+      - 7000:4040
     depends_on:
       - mongo-container
       - users-microservice

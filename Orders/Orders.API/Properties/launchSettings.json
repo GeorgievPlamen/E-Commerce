@@ -29,7 +29,7 @@
         "UsersMicroserviceName": "localhost",
         "UsersMicroservicePort": "9090",
         "ProductsMicroserviceName": "localhost",
-        "ProductsMicroservicePort": "8080"
+        "ProductsMicroservicePort": "7070"
       },
       "launchUrl": "swagger"
     }
