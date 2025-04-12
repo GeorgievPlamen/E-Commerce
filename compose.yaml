@@ -37,10 +37,10 @@ services:
       - MONGO_HOST=mongodb-container
       - MONGO_PORT=27017
       - MONGO_DATABASE=OrdersDatabase
-      - UsersMicroserviceName=users-microservice
-      - UsersMicroservicePort=9090
-      - ProductsMicroserviceName=products-microservice
-      - ProductsMicroservicePort=7070
+      - UsersMicroserviceName=apigateway
+      - UsersMicroservicePort=5050
+      - ProductsMicroserviceName=apigateway
+      - ProductsMicroservicePort=5050
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:

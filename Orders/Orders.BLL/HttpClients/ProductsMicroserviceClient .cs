@@ -23,7 +23,7 @@ public class ProductsMicroserviceClient(
             return productFromCache;
         }
 
-        var result = await httpClient.GetAsync($"/api/products/search/product-id/{productID}");
+        var result = await httpClient.GetAsync($"/gateway/products/search/product-id/{productID}");
 
         if (!result.IsSuccessStatusCode)
         {

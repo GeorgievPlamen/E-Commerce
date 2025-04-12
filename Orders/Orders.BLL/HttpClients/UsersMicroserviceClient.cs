@@ -20,7 +20,7 @@ public class UsersMicroserviceClient(
             return JsonSerializer.Deserialize<UserDTO>(cached);
         }
 
-        var result = await httpClient.GetAsync($"/api/users/{userID}");
+        var result = await httpClient.GetAsync($"/gateway/users/{userID}");
 
         if (!result.IsSuccessStatusCode)
         {
