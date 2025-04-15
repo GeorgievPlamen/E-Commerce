@@ -12,7 +12,11 @@
         "MONGO_PORT": "27017",
         "MONGO_DATABASE": "OrdersDatabase",
         "UsersMicroserviceName": "localhost",
-        "UsersMicroservicePort": "9090"
+        "UsersMicroservicePort": "9090",
+        "RABBITMQ_Hostname": "rabbitmq",
+        "RABBITMQ_Username": "user",
+        "RABBITMQ_Password": "password",
+        "RABBITMQ_Port": "5672"
       },
       "launchUrl": "swagger"
     },
@@ -29,7 +33,11 @@
         "UsersMicroserviceName": "localhost",
         "UsersMicroservicePort": "9090",
         "ProductsMicroserviceName": "localhost",
-        "ProductsMicroservicePort": "7070"
+        "ProductsMicroservicePort": "7070",
+        "RABBITMQ_Hostname": "rabbitmq",
+        "RABBITMQ_Username": "user",
+        "RABBITMQ_Password": "password",
+        "RABBITMQ_Port": "5672"
       },
       "launchUrl": "swagger"
     }

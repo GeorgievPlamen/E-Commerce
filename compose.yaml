@@ -13,6 +13,10 @@ services:
     environment:
       - MYSQL_HOST=mysql-host-productsmicroservice
       - MYSQL_PASSWORD=admin
+      - RABBITMQ_Hostname=rabbitmq
+      - RABBITMQ_Username=user
+      - RABBITMQ_Password=password
+      - RABBITMQ_Port=5672
     ports:
       - 7070:7070
     networks:
@@ -43,6 +47,10 @@ services:
       - ProductsMicroservicePort=5050
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - RABBITMQ_Hostname=rabbitmq
+      - RABBITMQ_Username=user
+      - RABBITMQ_Password=password
+      - RABBITMQ_Port=5672
     ports:
       - 7000:4040
     depends_on:
@@ -96,6 +104,17 @@ services:
       - "./redis:/data"
     ports:
       - "6379:6379"
+    networks:
+      - ecommerce-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
     networks:
       - ecommerce-network
 
