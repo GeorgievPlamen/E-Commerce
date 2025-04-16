@@ -1,16 +1,29 @@
 using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
 
 namespace Products.BLL.RabbitMQ;
 
-public class RabbitMQPublisher(IConfiguration configuration) : IRabbitMQPublisher
+public class RabbitMQPublisher : IRabbitMQPublisher
 {
-    private readonly string hostname = configuration["RABBITMQ_Hostname"];
-    private readonly string username = configuration["RABBITMQ_Username"];
-    private readonly string password = configuration["RABBITMQ_Password"];
-    private readonly string port = configuration["RABBITMQ_Port"];
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
 
-    public void Publish<T>(string routingKey, T message)
+    public RabbitMQPublisher(IConfiguration configuration)
     {
-        throw new NotImplementedException();
+        ConnectionFactory connectionFactory = new ConnectionFactory
+        {
+            HostName = configuration["RABBITMQ_Hostname"],
+            UserName = configuration["RABBITMQ_Username"],
+            Password = configuration["RABBITMQ_Password"],
+            Port = Convert.ToInt32(configuration["RABBITMQ_Port"])
+        };
+
+        _connection = connectionFactory.CreateConnection();
+        _channel = _connection.CreateModel();
+    }
+
+    public async void Publish<T>(string routingKey, T message)
+    {
+
     }
 }
