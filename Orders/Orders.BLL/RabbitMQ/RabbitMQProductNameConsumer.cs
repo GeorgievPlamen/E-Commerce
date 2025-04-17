@@ -6,7 +6,7 @@ using RabbitMQ.Client.Events;
 
 namespace Orders.BLL.RabbitMQ;
 
-public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer
+public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer, IDisposable
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
@@ -29,7 +29,7 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer
         _channel = _connection.CreateModel();
     }
 
-    public void Consume<T>(T message)
+    public void Consume()
     {
 
         var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
@@ -52,5 +52,11 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer
         };
 
         _channel.BasicConsume(Queue, true, consumer);
+    }
+
+    public void Dispose()
+    {
+        _channel.Dispose();
+        _connection.Dispose();
     }
 }

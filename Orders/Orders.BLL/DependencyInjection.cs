@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Orders.BLL.Mappers;
+using Orders.BLL.RabbitMQ;
 using Orders.BLL.ServiceContracts;
 using Orders.BLL.Services;
 
@@ -18,6 +19,8 @@ public static class DependencyInjection
         {
             opt.Configuration = $"{configuration["REDIS_HOST"]}:{configuration["REDIS_PORT"]}";
         });
+        services.AddSingleton<IRabbitMQProductNameConsumer, RabbitMQProductNameConsumer>();
+        services.AddHostedService<RabbitMQProductNameUpdateHostedService>();
 
         return services;
     }
