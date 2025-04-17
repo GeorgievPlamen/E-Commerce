@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.AspNetCore.Builder;
 using Products.BLL.DTO;
+using Products.BLL.RabbitMQ;
 using Products.BLL.ServiceContracts;
 using Products.DAL.Entities;
 using Products.DAL.RepositoryContracts;
@@ -13,7 +13,8 @@ public class ProductsService(
     IProductsRepository productsRepository,
     IMapper mapper,
     IValidator<ProductAddRequest> addValidator,
-    IValidator<ProductUpdateRequest> updateValidator) : IProductsService
+    IValidator<ProductUpdateRequest> updateValidator,
+    IRabbitMQPublisher rabbitMQPublisher) : IProductsService
 {
     public async Task<ProductResponse?> AddProduct(ProductAddRequest request)
     {
@@ -90,6 +91,11 @@ public class ProductsService(
         }
 
         var product = mapper.Map<Product>(request);
+
+        var routingKey = "product.update.name";
+        var message = new ProductNameUpdateMessage(product.ProductID, product.ProductName);
+
+        rabbitMQPublisher.Publish(routingKey, message);
 
         var result = await productsRepository.UpdateProduct(product);
 

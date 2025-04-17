@@ -9,6 +9,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
+    private readonly IConfiguration _configuration;
 
     public RabbitMQPublisher(IConfiguration configuration)
     {
@@ -20,6 +21,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
             Port = Convert.ToInt32(configuration["RABBITMQ_Port"])
         };
 
+        _configuration = configuration;
         _connection = connectionFactory.CreateConnection();
         _channel = _connection.CreateModel();
     }
@@ -29,7 +31,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
         var messageJson = JsonSerializer.Serialize(message);
         var messageBytes = Encoding.UTF8.GetBytes(messageJson);
 
-        var exchangeName = "products.exchange";
+        var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
 
         _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct, true);
 

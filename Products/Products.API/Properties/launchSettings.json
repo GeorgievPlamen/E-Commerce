@@ -13,10 +13,11 @@
         "MYSQL_DATABASE": "ecommerceproductsdatabase",
         "MYSQL_USER": "root",
         "MYSQL_PASSWORD": "admin",
-        "RABBITMQ_Hostname": "rabbitmq",
+        "RABBITMQ_Hostname": "localhost",
         "RABBITMQ_Username": "user",
         "RABBITMQ_Password": "password",
-        "RABBITMQ_Port": "5672"
+        "RABBITMQ_Port": "5672",
+        "RABBITMQ_Products_Exchange": "product.exchange"
       }
     },
     "https": {
