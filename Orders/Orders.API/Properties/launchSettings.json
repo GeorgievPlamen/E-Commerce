@@ -16,7 +16,8 @@
         "RABBITMQ_Hostname": "rabbitmq",
         "RABBITMQ_Username": "user",
         "RABBITMQ_Password": "password",
-        "RABBITMQ_Port": "5672"
+        "RABBITMQ_Port": "5672",
+        "RABBITMQ_Products_Exchange": "product.exchange"
       },
       "launchUrl": "swagger"
     },
@@ -37,7 +38,8 @@
         "RABBITMQ_Hostname": "rabbitmq",
         "RABBITMQ_Username": "user",
         "RABBITMQ_Password": "password",
-        "RABBITMQ_Port": "5672"
+        "RABBITMQ_Port": "5672",
+        "RABBITMQ_Products_Exchange": "product.exchange"
       },
       "launchUrl": "swagger"
     }
