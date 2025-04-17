@@ -26,7 +26,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
         _channel = _connection.CreateModel();
     }
 
-    public async void Publish<T>(string routingKey, T message)
+    public void Publish<T>(string routingKey, T message)
     {
         var messageJson = JsonSerializer.Serialize(message);
         var messageBytes = Encoding.UTF8.GetBytes(messageJson);

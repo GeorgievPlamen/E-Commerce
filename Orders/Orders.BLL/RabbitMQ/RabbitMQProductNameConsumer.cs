@@ -1,5 +1,8 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Orders.BLL.RabbitMQ;
 
@@ -26,7 +29,7 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer
         _channel = _connection.CreateModel();
     }
 
-    public async void Consume<T>(T message)
+    public void Consume<T>(T message)
     {
 
         var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
@@ -36,5 +39,18 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer
         _channel.QueueDeclare(Queue, true, false, false, null);
 
         _channel.QueueBind(Queue, exchangeName, RoutingKey);
+
+        var consumer = new EventingBasicConsumer(_channel);
+
+        consumer.Received += (sender, args) =>
+        {
+            System.Console.WriteLine("Event received");
+            var byteArray = args.Body.ToArray();
+            var messageJson = Encoding.UTF8.GetString(byteArray);
+            var message = JsonSerializer.Deserialize<ProductNameUpdateMessage>(messageJson);
+            System.Console.WriteLine("Message " + message);
+        };
+
+        _channel.BasicConsume(Queue, true, consumer);
     }
 }
