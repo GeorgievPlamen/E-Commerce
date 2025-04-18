@@ -47,6 +47,14 @@ public class ProductsService(
 
         var result = await productsRepository.DeleteProduct(product.ProductID);
 
+        if (result)
+        {
+            var routingKey = "product.delete";
+            var message = new ProductDeletionMessage(product.ProductID, product.ProductName);
+
+            rabbitMQPublisher.Publish(routingKey, message);
+        }
+
         return result;
     }
 
