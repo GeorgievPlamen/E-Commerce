@@ -33,7 +33,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
 
         var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
 
-        _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct, true);
+        _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic, true);
 
         _channel.BasicPublish(exchangeName, routingKey, null, messageBytes);
     }

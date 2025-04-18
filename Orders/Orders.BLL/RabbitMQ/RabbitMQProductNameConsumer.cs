@@ -11,7 +11,7 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer, IDispos
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly IConfiguration _configuration;
-    private const string RoutingKey = "product.update.name";
+    private const string RoutingKey = "product.update.*";
     private const string Queue = "orders.product.update.queue";
 
     public RabbitMQProductNameConsumer(IConfiguration configuration)
@@ -34,7 +34,7 @@ public class RabbitMQProductNameConsumer : IRabbitMQProductNameConsumer, IDispos
 
         var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
 
-        _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct, true);
+        _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic, true);
 
         _channel.QueueDeclare(Queue, true, false, false, null);
 

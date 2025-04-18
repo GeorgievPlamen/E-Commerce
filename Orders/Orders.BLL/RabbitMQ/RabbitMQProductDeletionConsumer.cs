@@ -11,7 +11,7 @@ public class RabbitMQProductDeletionConsumer : IDisposable, IRabbitMQProductDele
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly IConfiguration _configuration;
-    private const string RoutingKey = "product.delete";
+    private const string RoutingKey = "product.#";
     private const string Queue = "orders.product.delete.queue";
 
     public RabbitMQProductDeletionConsumer(IConfiguration configuration)
@@ -34,7 +34,7 @@ public class RabbitMQProductDeletionConsumer : IDisposable, IRabbitMQProductDele
 
         var exchangeName = _configuration["RABBITMQ_Products_Exchange"];
 
-        _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct, true);
+        _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic, true);
 
         _channel.QueueDeclare(Queue, true, false, false, null);
 
