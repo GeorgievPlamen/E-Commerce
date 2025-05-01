@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-deployment
+  labels:
+    app: ecommerce
+    environment: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-deployment
+  template:
+    metadata:
+      labels:
+        app: ecommerce-deployment
+  spec:
+    containers:
+    - name: ecommerce-deployment
+      image: georgievecommerceregistry.azurecr.io/ecommerce
+      ports:
+      - containerPort: 80
+      env:
+      - name: ASPNETCORE_ENVIRONMENT
+        value: Development
