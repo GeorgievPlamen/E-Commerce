@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ecommerce-deployment
+  name: ecommerce
   labels:
     app: ecommerce
     environment: development
@@ -9,14 +9,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ecommerce-deployment
+      app: ecommerce
   template:
     metadata:
       labels:
-        app: ecommerce-deployment
+        app: ecommerce
     spec:
       containers:
-      - name: ecommerce-deployment
+      - name: ecommerce
         image: georgievecommerceregistry.azurecr.io/ecommerce
         ports:
         - containerPort: 80
