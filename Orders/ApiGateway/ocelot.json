@@ -5,8 +5,8 @@
       "DownstreamPathTemplate": "/api/Orders",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get", "Post", "Options"],
@@ -18,8 +18,8 @@
       "DownstreamPathTemplate": "/api/Orders/search/orderid/{orderID}",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],
@@ -31,8 +31,8 @@
       "DownstreamPathTemplate": "/api/Orders/search/productid/{productID}",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],
@@ -44,8 +44,8 @@
       "DownstreamPathTemplate": "/api/Orders/search/orderDate/{orderDate}",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],
@@ -57,8 +57,8 @@
       "DownstreamPathTemplate": "/api/Orders/search/userid/{userID}",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],
@@ -70,8 +70,8 @@
       "DownstreamPathTemplate": "/api/Orders/{orderID}",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ordersmicroservice.api",
-          "Port": 4040
+          "Host": "ordersmicroservice",
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Put", "Delete", "Options"],
@@ -84,7 +84,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products-microservice",
-          "Port": 7070
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get", "Post", "Put", "Options"],
@@ -110,7 +110,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products-microservice",
-          "Port": 7070
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Delete", "Options"],
@@ -123,7 +123,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products-microservice",
-          "Port": 7070
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],
@@ -136,7 +136,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products-microservice",
-          "Port": 7070
+          "Port": 8080
         }
       ],
       "UpstreamHttpMethod": ["Get"],

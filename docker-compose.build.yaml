@@ -46,7 +46,11 @@ services:
       context: ./Orders/ApiGateway
       dockerfile: Dockerfile
     ports:
-      - 4000:5050
+      - "5000:8080"
+    depends_on:
+      - orders-microservice
+      - products-microservice
+      - users-microservice
 
   products-microservice:
     image: products-microservice:latest
@@ -61,8 +65,6 @@ services:
       - RABBITMQ_Password=password
       - RABBITMQ_Port=5672
       - RABBITMQ_Products_Exchange=product.exchange
-    ports:
-      - 7070:7070
     hostname: products-microservice
 
   users-microservice:
@@ -73,8 +75,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_HOST=postgres-container
-    ports:
-      - 9090:9090
     hostname: users-microservice
 
   orders-microservice:
@@ -98,8 +98,6 @@ services:
       - RABBITMQ_Password=password
       - RABBITMQ_Port=5672
       - RABBITMQ_Products_Exchange=product.exchange
-    ports:
-      - 7000:4040
     depends_on:
       - mongodb-container
       - users-microservice
