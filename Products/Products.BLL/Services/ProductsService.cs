@@ -60,6 +60,8 @@ public class ProductsService(
 
     public async Task<ProductResponse?> GetProductByCondition(Expression<Func<Product, bool>> expression)
     {
+        System.Console.WriteLine("Inside GetProductByCondition");
+
         var result = await productsRepository.GetProductByCondition(expression);
 
         var response = mapper.Map<ProductResponse>(result);

@@ -18,7 +18,7 @@ public class RabbitMQPublisher : IRabbitMQPublisher
             HostName = configuration["RABBITMQ_Hostname"],
             UserName = configuration["RABBITMQ_Username"],
             Password = configuration["RABBITMQ_Password"],
-            Port = Convert.ToInt32(configuration["RABBITMQ_Port"])
+            Port = 5672
         };
 
         _configuration = configuration;

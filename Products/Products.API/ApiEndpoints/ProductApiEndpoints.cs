@@ -11,6 +11,7 @@ public static class ProductApiEndpoints
 
         group.MapGet("/", async (IProductsService productsService) =>
         {
+            System.Console.WriteLine("Getting products");
             var products = await productsService.GetProducts();
 
             return Results.Ok(products);
