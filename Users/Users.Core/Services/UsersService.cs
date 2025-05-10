@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.Graph;
 using Users.Core.DTO;
 using Users.Core.Entities;
 using Users.Core.RepositoryContracts;
@@ -8,17 +9,18 @@ namespace Users.Core.Services;
 
 internal class UsersService(
     IUsersRepository usersRepository,
+    GraphServiceClient graphServiceClient,
     IMapper mapper) : IUsersService
 {
     public async Task<UserDTO?> GetUserByUserID(Guid userID)
     {
-        var user = await usersRepository
-            .GetUserByUserID(userID);
+        var existingUser = await graphServiceClient.Users[Convert.ToString(userID)].GetAsync();
 
-        if (user is null)
-            return null;
+        if (existingUser is null) return null;
 
-        return mapper.Map<UserDTO>(user);
+        var user = new UserDTO(Guid.Parse(existingUser.Id!), existingUser.UserPrincipalName, existingUser.GivenName, existingUser.Surname);
+
+        return user;
     }
 
     public async Task<AuthenticationResponse?> Login(LoginRequest loginRequest)
